@@ -100,7 +100,7 @@ Make sure you have the following installed on your machine:
 
 | Home Page                                       | Cart Page                                      |
 | ----------------------------------------------- | ---------------------------------------------- |
-| ![Home Page Screenshot](link-to-your-image.png) | ![Cart Page Screenshot](link-to-your-image.png)|
+| ![Home Page Screenshot](https://cdn.corenexis.com/files/b/5395683168.png) | ![Cart Page Screenshot](https://cdn.corenexis.com/files/b/6823788168.png)|
 
 
 ## License
