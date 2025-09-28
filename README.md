@@ -94,7 +94,6 @@ Make sure you have the following installed on your machine:
 
 ## Screenshots
 
-*[Add screenshots of your application here to showcase the UI. You can drag and drop images directly into the GitHub editor.]*
 
 **Example:**
 
