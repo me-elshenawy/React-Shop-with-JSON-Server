@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Button from 'react-bootstrap/Button';
-import axios from "axios"; 
-import "../css/register.css";
-
+import axios from "axios";
+import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -25,28 +23,20 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
-    setErrors(validationErrors);
-
     if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
-
+    setErrors({});
     try {
       const res = await axios.get(`http://localhost:3005/users?email=${email}`);
       if (res.data.length > 0) {
-        setErrors({ email: "This email is already registered." });
+        setErrors({ form: "This email is already registered." });
         return;
       }
-
-      await axios.post("http://localhost:3005/users", {
-        name,
-        email,
-        password, 
-      });
-      
+      await axios.post("http://localhost:3005/users", { name, email, password });
       alert("Registered successfully! Please login.");
       navigate("/login");
-
     } catch (error) {
       console.error("Registration error:", error);
       setErrors({ form: "Something went wrong. Please try again." });
@@ -54,47 +44,78 @@ export default function Register() {
   };
 
   return (
-    <div className="form-container">
-      <h2 className="form-title">Register</h2>
-      {errors.form && <p className="error-text">{errors.form}</p>}
-      <form onSubmit={handleSubmit} className="form-box">
-        <input
-          type="text"
-          placeholder="Enter Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        {errors.name && <p className="error-text">{errors.name}</p>}
+    <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "80vh" }}>
+      <Row className="w-100">
+        <Col md={6} lg={5} xl={4} className="mx-auto">
+          <Card className="shadow-lg border-0">
+            <Card.Body className="p-4 p-md-5">
+              <h2 className="text-center fw-bold mb-4 text-warning">Create Account</h2>
+              <Form onSubmit={handleSubmit}>
+                {errors.form && <Alert variant="danger">{errors.form}</Alert>}
 
-        <input
-          type="email"
-          placeholder="Enter Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        {errors.email && <p className="error-text">{errors.email}</p>}
+                <Form.Group className="mb-3" controlId="formBasicName">
+                  <Form.Label>Full Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    isInvalid={!!errors.name}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
+                </Form.Group>
 
-        <input
-          type="password"
-          placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {errors.password && <p className="error-text">{errors.password}</p>}
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    isInvalid={!!errors.email}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+                </Form.Group>
 
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
-        />
-        {errors.confirm && <p className="error-text">{errors.confirm}</p>}
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    isInvalid={!!errors.password}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                </Form.Group>
+                
+                <Form.Group className="mb-3" controlId="formConfirmPassword">
+                  <Form.Label>Confirm Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Confirm Password"
+                    value={confirm}
+                    onChange={(e) => setConfirm(e.target.value)}
+                    isInvalid={!!errors.confirm}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.confirm}</Form.Control.Feedback>
+                </Form.Group>
 
-        <Button type="submit" variant="primary">Register</Button>
-        <p className="switch-text">
-          Already have an account? <Link to="/login">Login</Link>
-        </p>
-      </form>
-    </div>
+                <div className="d-grid">
+                  <Button variant="warning" type="submit" className="fw-bold">
+                    Register
+                  </Button>
+                </div>
+              </Form>
+              <div className="mt-3 text-center">
+                <small>
+                  Already have an account? <Link to="/login">Login here</Link>
+                </small>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 }
