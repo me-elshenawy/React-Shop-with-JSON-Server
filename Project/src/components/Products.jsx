@@ -108,7 +108,7 @@ function Products() {
     });
 
   return (
-    <Container className="my-4">
+    <Container className="my-4" style={{ minHeight: '430px' }}>
       <Row className="mb-4">
         <Col md={6}>
           <Form.Control
